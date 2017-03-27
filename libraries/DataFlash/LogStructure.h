@@ -713,6 +713,16 @@ struct PACKED log_Rally {
     int16_t altitude;
 };
 
+//Date:20170324
+//Author:xjzhang
+struct PACKED log_AngRate {
+    LOG_PACKET_HEADER;
+    uint64_t time_us;
+    float   AngRatex;
+    float   AngRatey;
+    float   AngRatez;
+};
+
 // #endif // SBP_HW_LOGGING
 
 /*
@@ -916,7 +926,9 @@ Format characters in the format string for binary log messages
     { LOG_RATE_MSG, sizeof(log_Rate), \
       "RATE", "Qffffffffffff",  "TimeUS,RDes,R,ROut,PDes,P,POut,YDes,Y,YOut,ADes,A,AOut" }, \
     { LOG_RALLY_MSG, sizeof(log_Rally), \
-      "RALY", "QBBLLh", "TimeUS,Tot,Seq,Lat,Lng,Alt" }
+      "RALY", "QBBLLh", "TimeUS,Tot,Seq,Lat,Lng,Alt" },\
+    { LOG_ANGRATE_MSG, sizeof(log_AngRate), \
+      "ANGR", "Qfff",  "TimeUS,AngRatex,AngRatey,AngRatez" }
 
 // #if SBP_HW_LOGGING
 #define LOG_SBP_STRUCTURES \
@@ -1032,6 +1044,7 @@ enum LogMessages {
     LOG_GIMBAL3_MSG,
     LOG_RATE_MSG,
     LOG_RALLY_MSG,
+    LOG_ANGRATE_MSG,
 };
 
 enum LogOriginType {

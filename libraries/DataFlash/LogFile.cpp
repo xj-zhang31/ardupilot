@@ -1884,6 +1884,23 @@ void DataFlash_Class::Log_Write_Rate(const AP_AHRS &ahrs,
     WriteBlock(&pkt_rate, sizeof(pkt_rate));
 }
 
+//date:20170324
+//author:xjzhang
+//
+ void DataFlash_Class::Log_Write_AngRate(const AC_AttitudeControl &attitude_control)
+ {
+
+    const Vector3f &angrate_targets = attitude_control._attitude_rate_bf_targets();
+
+     struct log_AngRate pkt_angrate={
+            LOG_PACKET_HEADER_INIT(LOG_ANGRATE_MSG),
+             time_us         : AP_HAL::micros64(),
+             AngRatex       : degrees(angrate_targets.x),
+             AngRatey       : degrees(angrate_targets.y),
+             AngRatez       : degrees(angrate_targets.z)
+     };
+     WriteBlock(&pkt_angrate, sizeof(pkt_angrate));
+ }
 // Write rally points
 void DataFlash_Class::Log_Write_Rally(const AP_Rally &rally)
 {

@@ -150,6 +150,10 @@ public:
                         const AC_PosControl &pos_control);
     void Log_Write_Rally(const AP_Rally &rally);
 
+    //date:20170324
+    //Author:xjzhang
+     void Log_Write_AngRate(const AC_AttitudeControl &attitude_control);
+
     void Log_Write(const char *name, const char *labels, const char *fmt, ...);
 
     // This structure provides information on the internal member data of a PID for logging purposes

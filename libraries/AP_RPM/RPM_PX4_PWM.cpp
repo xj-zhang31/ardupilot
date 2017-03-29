@@ -31,7 +31,7 @@
 #include <errno.h>
 #include <cmath>
 
-#define PWM_LOGGING 0
+#define PWM_LOGGING 1
 
 extern const AP_HAL::HAL& hal;
 

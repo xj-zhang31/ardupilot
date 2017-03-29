@@ -748,6 +748,7 @@ void Copter::Log_Write_Throw(ThrowModeStage stage, float velocity, float velocit
     DataFlash.WriteBlock(&pkt, sizeof(pkt));
 }
 
+
 // proximity sensor logging
 struct PACKED log_Proximity {
     LOG_PACKET_HEADER;
@@ -799,6 +800,26 @@ void Copter::Log_Write_Proximity()
 #endif
 }
 
+struct PACKED log_Controlin {
+    LOG_PACKET_HEADER;
+    uint64_t time_us;
+    int16_t   Control_roll;
+    int16_t   Control_pitch;
+    int16_t   Control_yaw;
+    int16_t   Control_throttle;
+};
+void Copter::Log_Write_Controlin()
+ {
+     struct log_Controlin pkt_controlin={
+            LOG_PACKET_HEADER_INIT(LOG_CONTROLIN_MSG),
+            time_us         : AP_HAL::micros64(),
+            Control_roll    : channel_roll->get_control_in(),
+            Control_pitch   : channel_pitch->get_control_in(),
+            Control_yaw     : channel_yaw->get_control_in(),
+            Control_throttle : channel_throttle->get_control_in()
+     };
+     DataFlash.WriteBlock(&pkt_controlin, sizeof(pkt_controlin));
+ }
 const struct LogStructure Copter::log_structure[] = {
     LOG_COMMON_STRUCTURES,
 #if AUTOTUNE_ENABLED == ENABLED
@@ -843,6 +864,8 @@ const struct LogStructure Copter::log_structure[] = {
       "THRO",  "QBffffbbbb",  "TimeUS,Stage,Vel,VelZ,Acc,AccEfZ,Throw,AttOk,HgtOk,PosOk" },
     { LOG_PROXIMITY_MSG, sizeof(log_Proximity),
       "PRX",   "QBffffffff",  "TimeUS,Health,D0,D45,D90,D135,D180,D225,D270,D315" },
+    { LOG_CONTROLIN_MSG, sizeof(log_Controlin),
+      "CTIN", "Qhhhh",  "TimeUS,Control_roll,Control_pitch,Control_yaw,Control_throttle" }
 };
 
 #if CLI_ENABLED == ENABLED

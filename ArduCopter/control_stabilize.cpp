@@ -50,7 +50,10 @@ void Copter::stabilize_run()
 
     // get pilot's desired throttle
     pilot_throttle_scaled = get_pilot_desired_throttle(channel_throttle->get_control_in());
-
+    std_target_roll=target_roll;
+    std_target_pitch=target_pitch;
+    std_target_yaw_rate=target_yaw_rate;
+    std_pilot_throttle_scaled=pilot_throttle_scaled;
     // call attitude controller
     attitude_control.input_euler_angle_roll_pitch_euler_rate_yaw(target_roll, target_pitch, target_yaw_rate, get_smoothing_gain());
 

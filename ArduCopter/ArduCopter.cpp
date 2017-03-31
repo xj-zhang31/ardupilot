@@ -370,6 +370,7 @@ void Copter::ten_hz_logging_loop()
         DataFlash.Log_Write_Rate(ahrs, motors, attitude_control, pos_control);
         DataFlash.Log_Write_AngRate(attitude_control);
         Log_Write_Controlin();
+        Log_Write_Target_angle();
         if (should_log(MASK_LOG_PID)) {
             DataFlash.Log_Write_PID(LOG_PIDR_MSG, attitude_control.get_rate_roll_pid().get_pid_info());
             DataFlash.Log_Write_PID(LOG_PIDP_MSG, attitude_control.get_rate_pitch_pid().get_pid_info());

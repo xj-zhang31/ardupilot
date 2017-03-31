@@ -799,7 +799,9 @@ void Copter::Log_Write_Proximity()
     DataFlash.WriteBlock(&pkt, sizeof(pkt));
 #endif
 }
-
+// Control info log
+//20170331
+//xj-zhang
 struct PACKED log_Controlin {
     LOG_PACKET_HEADER;
     uint64_t time_us;
@@ -819,6 +821,26 @@ void Copter::Log_Write_Controlin()
             Control_throttle : channel_throttle->get_control_in()
      };
      DataFlash.WriteBlock(&pkt_controlin, sizeof(pkt_controlin));
+ }
+struct PACKED log_Targetang {
+    LOG_PACKET_HEADER;
+    uint64_t time_us;
+    float   Target_roll;
+    float   Target_pitch;
+    float   Target_yaw_rate;
+    float   Target_throttle;
+};
+void Copter::Log_Write_Target_angle()
+ {
+     struct log_Targetang pkt_tarang={
+            LOG_PACKET_HEADER_INIT(LOG_TARGETANG_MSG),
+            time_us         : AP_HAL::micros64(),
+            Target_roll    : std_target_roll,
+            Target_pitch   : std_target_pitch,
+            Target_yaw_rate     : std_target_yaw_rate,
+            Target_throttle : std_pilot_throttle_scaled
+     };
+     DataFlash.WriteBlock(&pkt_tarang, sizeof(pkt_tarang));
  }
 const struct LogStructure Copter::log_structure[] = {
     LOG_COMMON_STRUCTURES,
@@ -865,7 +887,9 @@ const struct LogStructure Copter::log_structure[] = {
     { LOG_PROXIMITY_MSG, sizeof(log_Proximity),
       "PRX",   "QBffffffff",  "TimeUS,Health,D0,D45,D90,D135,D180,D225,D270,D315" },
     { LOG_CONTROLIN_MSG, sizeof(log_Controlin),
-      "CTIN", "Qhhhh",  "TimeUS,Control_roll,Control_pitch,Control_yaw,Control_throttle" }
+      "CTIN", "Qhhhh",  "TimeUS,Control_roll,Control_pitch,Control_yaw,Control_throttle" },
+    { LOG_TARGETANG_MSG, sizeof(log_Targetang),
+      "TAAN", "Qffff",  "TimeUS,Tar_roll,Tar_pitch,Tar_yaw_rate,Tar_throttle" },
 };
 
 #if CLI_ENABLED == ENABLED

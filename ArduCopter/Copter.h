@@ -174,7 +174,12 @@ private:
     RC_Channel *channel_pitch;
     RC_Channel *channel_throttle;
     RC_Channel *channel_yaw;
-
+    // Target_Control info
+    //Data:20170331
+    //Author:xj-zhang
+    float std_target_roll, std_target_pitch;
+    float std_target_yaw_rate;
+    float std_pilot_throttle_scaled;
     // Dataflash
     DataFlash_Class DataFlash;
 
@@ -748,6 +753,7 @@ private:
     void Log_Write_Proximity();
     void Log_Write_Vehicle_Startup_Messages();
     void Log_Write_Controlin();
+    void Log_Write_Target_angle();
     void Log_Read(uint16_t log_num, uint16_t start_page, uint16_t end_page);
     void start_logging() ;
     void load_parameters(void);
